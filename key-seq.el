@@ -1,6 +1,6 @@
 ;;; key-seq.el --- map pairs of sequentially pressed keys to commands
 
-;; Copyright (C) 2013 Vyacheslav Levit
+;; Copyright (C) 2015 Vyacheslav Levit
 ;; Copyright (C) 2003,2005,2008,2012 David Andersson
 
 ;; Author: Vyacheslav Levit <dev@vlevit.org>
@@ -30,14 +30,14 @@
 
 ;;; Commentary:
 
-;; This package provides interactive functions to map pairs of
-;; sequentially and quickly pressed keys to commands:
+;; This package provides functions to map pairs of sequentially but
+;; quickly pressed keys to commands:
 ;;
 ;;  - `key-seq-define-global' defines a pair in the global key-map,
 ;;  - `key-seq-define' defines a pair in a specific key-map.
 ;;
-;; The package depends on key-chord.el and to work it requires active
-;; key-chord-mode. Add this line to your configuration:
+;; The package depends on key-chord.el and it requires active
+;; key-chord-mode to work. Add this line to your configuration:
 ;;
 ;;    (key-chord-mode 1)
 ;;
@@ -51,6 +51,9 @@
 ;; dired shall be run if you press `q' and `d' only in that order
 ;; while if you define the binding with `key-seq-define-global' both
 ;; `qd' and `dq' shall run dired.
+;;
+;; To unset key sequence use either `key-seq-unset-global' or
+;; `key-seq-unset-local'.
 ;;
 ;; For more information and various customizations see key-chord.el
 ;; documentation.
@@ -83,6 +86,16 @@ If COMMAND is nil, the key-chord is removed."
     (if (eq key1 key2)
         (define-key keymap (vector 'key-chord key1 key2) command)
       (define-key keymap (vector 'key-chord key1 key2) command))))
+
+(defun key-seq-unset-global (keys)
+  "Remove global key sequence of the two keys in KEYS."
+  (interactive "sUnset key sequence globally (2 keys): ")
+  (key-seq-define (current-global-map) keys nil))
+
+(defun key-seq-unset-local (keys)
+  "Remove local key sequence of the two keys in KEYS."
+  (interactive "sUnset key sequence locally (2 keys): ")
+  (key-seq-define (current-local-map) keys nil))
 
 (provide 'key-seq)
 
