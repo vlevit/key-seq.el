@@ -1,4 +1,4 @@
-;;; key-seq.el - map pairs of sequentially pressed keys to commands
+;;; key-seq.el --- map pairs of sequentially pressed keys to commands
 
 ;; Copyright (C) 2013 Vyacheslav Levit
 ;; Copyright (C) 2003,2005,2008,2012 David Andersson
@@ -59,13 +59,22 @@
 
 ;;;###autoload
 (defun key-seq-define-global (keys command)
-  "Like key-chord-define-global but the order of keys matters."
+  "Define a key sequence of the two keys in KEYS starting a COMMAND.
+\nKEYS can be a string or a vector of two elements. Currently only elements
+that corresponds to ascii codes in the range 32 to 126 can be used.
+\nCOMMAND can be an interactive function, a string, or nil.
+If COMMAND is nil, the key-chord is removed.
+\nNote that KEYS defined locally in the current buffer will have precedence."
   (interactive "sSet key chord globally (2 keys): \nCSet chord \"%s\" to command: ")
   (key-seq-define (current-global-map) keys command))
 
 ;;;###autoload
 (defun key-seq-define (keymap keys command)
-  "Like key-chord-define but the order of keys matters."
+  "Define in KEYMAP, a key sequence of the two keys in KEYS starting a COMMAND.
+\nKEYS can be a string or a vector of two elements. Currently only elements
+that corresponds to ascii codes in the range 32 to 126 can be used.
+\nCOMMAND can be an interactive function, a string, or nil.
+If COMMAND is nil, the key-chord is removed."
   (if (/= 2 (length keys))
       (error "Key-chord keys must have two elements"))
   ;; Exotic chars in a string are >255 but define-key wants 128..255 for those
