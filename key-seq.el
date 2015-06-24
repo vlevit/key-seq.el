@@ -72,6 +72,18 @@ If COMMAND is nil, the key-chord is removed.
   (key-seq-define (current-global-map) keys command))
 
 ;;;###autoload
+(defun key-seq-define-local (keys command)
+  "Locally define a key sequence of the two keys in KEYS starting a COMMAND.
+\nKEYS can be a string or a vector of two elements. Currently only elements
+that corresponds to ascii codes in the range 32 to 126 can be used.
+\nCOMMAND can be an interactive function, a string, or nil.
+If COMMAND is nil, the key-chord is removed.
+\nThe binding goes in the current buffer's local map,
+which in most cases is shared with all other buffers in the same major mode."
+  (interactive "sSet key chord locally (2 keys): \nCSet chord \"%s\" to command: ")
+  (key-chord-define (current-local-map) keys command))
+
+;;;###autoload
 (defun key-seq-define (keymap keys command)
   "Define in KEYMAP, a key sequence of the two keys in KEYS starting a COMMAND.
 \nKEYS can be a string or a vector of two elements. Currently only elements
