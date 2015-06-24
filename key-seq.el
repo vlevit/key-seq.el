@@ -57,6 +57,8 @@
 ;;
 ;; For more information and various customizations see key-chord.el
 ;; documentation.
+;;
+;; The code in key-seq.el is 99% copy/paste from key-chord.el.
 
 ;;; Code:
 
