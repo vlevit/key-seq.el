@@ -49,7 +49,7 @@
 ;;    (key-seq-define-global "qd" 'dired)
 ;;
 ;; dired shall be run if you press `q' and `d' only in that order
-;; while if you define the binding with `key-seq-define-global' both
+;; while if you define the binding with `key-chord-define-global' both
 ;; `qd' and `dq' shall run dired.
 ;;
 ;; To unset key sequence use either `key-seq-unset-global' or
