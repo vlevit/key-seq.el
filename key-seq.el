@@ -83,7 +83,7 @@ If COMMAND is nil, the key-chord is removed.
 \nThe binding goes in the current buffer's local map,
 which in most cases is shared with all other buffers in the same major mode."
   (interactive "sSet key chord locally (2 keys): \nCSet chord \"%s\" to command: ")
-  (key-chord-define (current-local-map) keys command))
+  (key-seq-define (current-local-map) keys command))
 
 ;;;###autoload
 (defun key-seq-define (keymap keys command)
