@@ -5,7 +5,7 @@
 
 ;; Author: Vyacheslav Levit <dev@vlevit.org>
 ;; Maintainer: Vyacheslav Levit <dev@vlevit.org>
-;; Version: 1.0.0
+;; Version: 1.0.1
 ;; Created: 15 June 2015
 ;; Package-Requires: ((key-chord "0.6"))
 ;; Keywords: convenience keyboard keybindings
