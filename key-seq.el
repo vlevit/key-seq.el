@@ -1,4 +1,4 @@
-;;; key-seq.el --- map pairs of sequentially pressed keys to commands
+;;; key-seq.el --- map pairs of sequentially pressed keys to commands  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2015 Vyacheslav Levit
 ;; Copyright (C) 2003,2005,2008,2012 David Andersson
@@ -115,7 +115,7 @@ If COMMAND is nil, the key-chord is removed."
   (let ((key1 (logand 255 (aref keys 0)))
         (key2 (logand 255 (aref keys 1))))
     ;; (define-key keymap (vector 'key-chord key1 key2) command)
-    (evil-define-key state keymap (vector 'key-chord key1 key2) command)
+    (evil-define-key* state keymap (vector 'key-chord key1 key2) command)
     )
   )
 
