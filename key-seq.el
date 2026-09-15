@@ -1,4 +1,4 @@
-;;; key-seq.el --- map pairs of sequentially pressed keys to commands
+;;; key-seq.el --- map pairs of sequentially pressed keys to commands  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2015 Vyacheslav Levit
 ;; Copyright (C) 2003,2005,2008,2012 David Andersson
@@ -62,6 +62,9 @@
 
 ;;; Code:
 
+(declare-function key-chord-register-keys "key-chord" (key1 key2))
+(declare-function key-chord-unregister-keys "key-chord" (key1 key2))
+
 ;;;###autoload
 (defun key-seq-define-global (keys command)
   "Define a key sequence of the two keys in KEYS starting a COMMAND.
@@ -94,12 +97,20 @@ that corresponds to ascii codes in the range 32 to 126 can be used.
 If COMMAND is nil, the key-chord is removed."
   (if (/= 2 (length keys))
       (error "Key-chord keys must have two elements"))
-  ;; Exotic chars in a string are >255 but define-key wants 128..255 for those
-  (let ((key1 (logand 255 (aref keys 0)))
-        (key2 (logand 255 (aref keys 1))))
+  (let ((key1 (aref keys 0))
+        (key2 (aref keys 1)))
+    (unless (and (integerp key1) (< key1 256)
+                 (integerp key2) (< key2 256))
+      (error "Key-seq keys must both be bytes (characters with codes < 256)"))
     (if (eq key1 key2)
         (define-key keymap (vector 'key-chord key1 key2) command)
-      (define-key keymap (vector 'key-chord key1 key2) command))))
+      (define-key keymap (vector 'key-chord key1 key2) command))
+    ;; Register keys with key-chord's tracking optimization so the
+    ;; input method doesn't skip chord detection for these keys.
+    (when (fboundp 'key-chord-register-keys)
+      (if command
+          (key-chord-register-keys key1 key2)
+        (key-chord-unregister-keys key1 key2)))))
 
 (defun key-seq-unset-global (keys)
   "Remove global key sequence of the two keys in KEYS."
