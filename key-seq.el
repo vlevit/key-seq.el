@@ -7,7 +7,7 @@
 ;; Maintainer: Vyacheslav Levit <dev@vlevit.org>
 ;; Version: 1.0.1
 ;; Created: 15 June 2015
-;; Package-Requires: ((key-chord "0.6"))
+;; Package-Requires: ((key-chord "0.6") (evil "1.15.0"))
 ;; Keywords: convenience keyboard keybindings
 ;; URL: http://github.com/vlevit/key-seq.el
 
@@ -66,6 +66,8 @@
 (declare-function key-chord-unregister-keys "key-chord" (key1 key2))
 
 ;;;###autoload
+(require 'evil)
+
 (defun key-seq-define-global (keys command)
   "Define a key sequence of the two keys in KEYS starting a COMMAND.
 \nKEYS can be a string or a vector of two elements. Currently only elements
@@ -111,6 +113,22 @@ If COMMAND is nil, the key-chord is removed."
       (if command
           (key-chord-register-keys key1 key2)
         (key-chord-unregister-keys key1 key2)))))
+
+(defun key-seq-define-evil (state keymap keys command)
+  "Define in KEYMAP, a key sequence of the two keys in KEYS starting a COMMAND.
+\nKEYS can be a string or a vector of two elements. Currently only elements
+that corresponds to ascii codes in the range 32 to 126 can be used.
+\nCOMMAND can be an interactive function, a string, or nil.
+If COMMAND is nil, the key-chord is removed."
+  (if (/= 2 (length keys))
+      (error "Key-chord keys must have two elements"))
+  ;; Exotic chars in a string are >255 but define-key wants 128..255 for those
+  (let ((key1 (logand 255 (aref keys 0)))
+        (key2 (logand 255 (aref keys 1))))
+    ;; (define-key keymap (vector 'key-chord key1 key2) command)
+    (evil-define-key* state keymap (vector 'key-chord key1 key2) command)
+    )
+  )
 
 (defun key-seq-unset-global (keys)
   "Remove global key sequence of the two keys in KEYS."
